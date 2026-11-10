@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#100B10">
+  <meta name="description" content="A premium intelligence dashboard for exploring the GitHub ecosystem.">
+  <title>GitHub Explorer — Obsidian Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div><div class="ambient ambient-three"></div>
+  <div class="grain"></div><div class="grid-wash"></div>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#"><span class="brand-mark">G<span>✳</span></span><span class="brand-name">GITHUB<span>EXPLORER</span></span></a>
+      <div class="sidebar-scroll">
+        <div class="side-label">WORKSPACE</div>
+        <nav class="side-nav" aria-label="Main navigation">
+          <button class="nav-item active" data-view="discover"><span class="nav-icon">◈</span> Discover <span class="nav-line"></span></button>
+          <button class="nav-item" data-view="bookmarks"><span class="nav-icon">◇</span> Bookmarks <span class="nav-count" id="bookmarkCount">0</span></button>
+          <button class="nav-item" data-view="history"><span class="nav-icon">◷</span> Search history</button>
+        </nav>
+        <div class="side-label explore-label">EXPLORE BY</div>
+        <div class="quick-filters">
+          <button class="quick-filter" data-query="stars:>10000"><span class="dot dot-plum"></span> Most starred</button>
+          <button class="quick-filter" data-query="forks:>1000"><span class="dot dot-berry"></span> Most forked</button>
+          <button class="quick-filter" data-query="pushed:>2025-01-01"><span class="dot dot-champagne"></span> Recently active</button>
+          <button class="quick-filter" data-query="topic:ai stars:>100"><span class="dot dot-muted"></span> AI & machine learning</button>
+        </div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="api-card"><span class="api-pulse"></span><div><strong>GitHub API</strong><small>Live connection</small></div><span class="api-live">LIVE</span></div>
+        <div class="profile-row"><div class="profile-avatar" id="profileAvatar">GX</div><div><strong id="profileName">Your workspace</strong><small id="profileEmail">Personal dashboard</small></div><form method="post" action="{{ url_for('logout') }}"><button class="logout-btn" type="submit">Sign out</button></form></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Toggle navigation">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumbCurrent">Discover</strong></div>
+        <div class="top-actions"><span class="top-status"><i></i> Systems operational</span><div class="top-divider"></div><button class="icon-button" id="refreshBtn" aria-label="Refresh results" title="Refresh">↻</button><div class="top-avatar" id="topAvatar">GX</div></div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> THE DEVELOPER ECOSYSTEM, REVEALED</div>
+          <h1>Explore the <em>universe</em><br>of GitHub<span class="period">.</span></h1>
+          <p class="hero-subtitle">A considered view of the ideas, people and open-source projects shaping what comes next.</p>
+          <div class="hero-meta"><span class="live-dot"></span> LIVE DATA FROM GITHUB <span class="meta-sep">·</span> UPDATED ON DEMAND</div>
+        </div>
+        <div class="hero-orbit" aria-hidden="true"><div class="orbit-ring ring-a"></div><div class="orbit-ring ring-b"></div><div class="orbit-ring ring-c"></div><div class="orbit-core">G<span>✳</span></div><div class="orbit-node node-a"></div><div class="orbit-node node-b"></div><div class="orbit-node node-c"></div><span class="orbit-caption">OPEN SOURCE<br>INTELLIGENCE</span></div>
+      </section>
+
+      <section class="search-panel">
+        <div class="search-top"><div><span class="section-kicker">DISCOVERY ENGINE</span><h2>Find your next obsession.</h2></div><span class="search-hint">POWERED BY GITHUB SEARCH API</span></div>
+        <form id="searchForm" class="search-form">
+          <span class="search-symbol">⌕</span><input id="searchInput" type="search" value="stars:>1000" placeholder="Search repositories, topics, languages…" autocomplete="off" aria-label="Search GitHub repositories">
+          <button class="search-submit" type="submit">Explore <span>↗</span></button>
+        </form>
+        <div class="search-bottom"><span>TRY A QUERY</span><button class="query-chip" data-fill="topic:react">topic:react</button><button class="query-chip" data-fill="language:python stars:>5000">language:python</button><button class="query-chip" data-fill="topic:design-systems">topic:design-systems</button><div class="search-spacer"></div><label class="sort-label" for="sortSelect">SORT BY</label><select id="sortSelect"><option value="stars">Stars</option><option value="forks">Forks</option><option value="updated">Recently updated</option><option value="help-wanted-issues">Help wanted</option></select></div>
+      </section>
+
+      <section class="stats-grid" aria-label="Search analytics">
+        <article class="stat-card"><div class="stat-top"><span>REPOSITORIES FOUND</span><span class="stat-icon">▤</span></div><div class="stat-value" id="totalRepos">—</div><div class="stat-foot">Matching your current query</div></article>
+        <article class="stat-card"><div class="stat-top"><span>STARS IN VIEW</span><span class="stat-icon">✧</span></div><div class="stat-value" id="totalStars">—</div><div class="stat-foot">Across loaded repositories</div></article>
+        <article class="stat-card"><div class="stat-top"><span>LANGUAGES</span><span class="stat-icon">⌘</span></div><div class="stat-value" id="languageCount">—</div><div class="stat-foot">Distinct languages represented</div></article>
+        <article class="stat-card"><div class="stat-top"><span>AVG. STARS</span><span class="stat-icon">↗</span></div><div class="stat-value" id="averageStars">—</div><div class="stat-foot">Per loaded repository</div></article>
+      </section>
+
+      <section class="content-grid">
+        <div class="repositories-section">
+          <div class="section-heading"><div><span class="section-kicker">CURATED BY YOUR QUERY</span><h2 id="resultsTitle">Trending repositories</h2><p id="resultsSubtitle">A live snapshot of the open-source landscape.</p></div><div class="view-toggle"><button class="view-btn selected" aria-label="Grid view">▦</button><button class="view-btn" aria-label="List view" id="listViewBtn">☷</button></div></div>
+          <div class="filter-row"><div class="filter-tabs"><button class="filter-tab active" data-language="all">All languages</button><button class="filter-tab" data-language="JavaScript">JavaScript</button><button class="filter-tab" data-language="Python">Python</button><button class="filter-tab" data-language="TypeScript">TypeScript</button></div><span class="result-count" id="resultCount">Loading repositories…</span></div>
+          <div class="repo-grid" id="repoGrid"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+          <div class="load-more-wrap"><button id="loadMoreBtn" class="load-more">Load more repositories <span>↓</span></button></div>
+        </div>
+        <aside class="insights-column">
+          <div class="insight-card language-card"><div class="insight-heading"><div><span class="section-kicker">ECOSYSTEM PULSE</span><h3>Language mix</h3></div><span class="chart-mark">◌</span></div><p>Distribution across the repositories currently in view.</p><div class="chart-wrap"><canvas id="languageChart" aria-label="Repository language distribution chart"></canvas><div class="chart-center"><strong id="chartTotal">—</strong><span>REPOS</span></div></div><div id="languageLegend" class="chart-legend"></div></div>
+          <div class="insight-card spotlight-card"><div class="insight-heading"><div><span class="section-kicker">A LITTLE INSPIRATION</span><h3>Explore a topic</h3></div><span class="spotlight-spark">✧</span></div><div class="spotlight-topic"><span class="topic-symbol">⌘</span><div><strong>Developer tools</strong><small>Tools that make building better.</small></div><span class="spot-arrow">↗</span></div><button class="spotlight-action" data-topic="topic:developer-tools stars:>100">Explore this space <span>→</span></button></div>
+          <div class="note-card"><span class="note-quote">“</span><p>Great software is built in the open. Go find something worth learning from.</p><span class="note-byline">THE OPEN-SOURCE WAY</span></div>
+        </aside>
+      </section>
+      <footer class="footer"><span>GITHUB EXPLORER <b>·</b> OBSIDIAN EDITION</span><span>Data provided by GitHub's public API</span><span>CRAFTED FOR THE CURIOUS <i>✧</i></span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true"><section class="repo-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="Close dialog">×</button><div id="modalContent"><div class="modal-loading">Loading repository details…</div></div></section></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

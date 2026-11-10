@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#100B10">
+  <title>{{ 'Create account' if mode == 'register' else 'Sign in' }} — GitHub Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-page">
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div><div class="ambient ambient-three"></div><div class="grain"></div><div class="grid-wash"></div>
+  <main class="auth-wrap">
+    <a class="brand auth-brand" href="{{ url_for('login') }}"><span class="brand-mark">G<span>✳</span></span><span class="brand-name">GITHUB<span>EXPLORER</span></span></a>
+    <section class="auth-card">
+      <div class="eyebrow"><span class="eyebrow-line"></span> YOUR PRIVATE DEVELOPER WORKSPACE</div>
+      <h1>{{ 'Create your' if mode == 'register' else 'Welcome' }} <em>{{ 'account' if mode == 'register' else 'back' }}</em><span class="period">.</span></h1>
+      <p class="auth-intro">{{ 'A personal space for the repositories, ideas and discoveries you want to keep.' if mode == 'register' else 'Sign in to continue exploring your own GitHub universe.' }}</p>
+      {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="auth-alert {{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+      <form class="auth-form" method="post" action="{{ url_for('register_post') if mode == 'register' else url_for('login_post') }}">
+        {% if mode == 'register' %}<label for="name">YOUR NAME</label><input id="name" name="name" type="text" value="{{ name|default('') }}" placeholder="How should we call you?" minlength="2" maxlength="60" required autocomplete="name">{% endif %}
+        <label for="email">EMAIL ADDRESS</label><input id="email" name="email" type="email" value="{{ email|default('') }}" placeholder="you@example.com" required autocomplete="email">
+        <label for="password">PASSWORD</label><input id="password" name="password" type="password" placeholder="{{ 'At least 8 characters' if mode == 'register' else 'Enter your password' }}" minlength="{{ 8 if mode == 'register' else 1 }}" required autocomplete="{{ 'new-password' if mode == 'register' else 'current-password' }}">
+        <button class="search-submit auth-submit" type="submit">{{ 'Create my workspace' if mode == 'register' else 'Sign in to workspace' }} <span>↗</span></button>
+      </form>
+      <p class="auth-switch">{{ 'Already have an account?' if mode == 'register' else 'New to GitHub Explorer?' }} <a href="{{ url_for('login') if mode == 'register' else url_for('register') }}">{{ 'Sign in' if mode == 'register' else 'Create an account' }}</a></p>
+      <div class="auth-foot"><span class="live-dot"></span> PRIVATE WORKSPACE · YOUR DATA STAYS YOURS</div>
+    </section>
+  </main>
+</body>
+</html>

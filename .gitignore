@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+
+# Per-user account and activity database
+github_explorer.db
