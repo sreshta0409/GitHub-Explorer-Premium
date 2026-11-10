@@ -1,3 +1,11 @@
+# GitHub Explorer Premium
+
+🚀 **Live Demo:** https://github-explorer-premium.onrender.com
+
+A premium multi-user GitHub Explorer with a modern interface.
+
+
+
 # GitHub Explorer — Obsidian Edition
 
 A premium dark-wine GitHub intelligence dashboard powered by Flask, SQLite and the live GitHub REST API. The original discovery interface and visual style are retained, with account-based workspaces added.
